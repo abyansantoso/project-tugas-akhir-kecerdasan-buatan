@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistem Pakar Diagnosa Laptop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Sistem Pakar Diagnosa Laptop</h1>
+    <p class="subtitle">Hybrid Machine Learning & Certainty Factor</p>
+
+    <form method="POST">
+        <div class="form-group">
+            <label>Tegangan (Volt)</label>
+            <input type="number" step="0.1" name="voltage" required>
+        </div>
+
+        <div class="form-group">
+            <label>Suhu Laptop (°C)</label>
+            <input type="number" name="temperature" required>
+        </div>
+
+        <div class="form-group">
+            <label>Status Kipas</label>
+            <select name="fan_speed">
+                <option value="1">Normal</option>
+                <option value="0">Mati</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Battery Health</label>
+            <select name="battery">
+                <option>Good</option>
+                <option>Normal</option>
+                <option>Poor</option>
+                <option>Bad</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Power Rail</label>
+            <select name="power_rail">
+                <option>Stable</option>
+                <option>Unstable</option>
+                <option>Failed</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Beep Code</label>
+            <select name="beep">
+                <option>None</option>
+                <option>Short</option>
+                <option>Long</option>
+                <option>Continuous</option>
+            </select>
+        </div>
+
+        <button type="submit">🔍 Diagnosa Sekarang</button>
+    </form>
+
+    {% if hasil %}
+    <div class="result">
+        <h2>📊 Hasil Diagnosa</h2>
+        <p><b>Prediksi Machine Learning:</b>
+            <span class="badge badge-info">{{ hasil.pred }} ({{ hasil.prob }})</span>
+        </p>
+
+        <h3>Certainty Factor</h3>
+        <ul>
+            {% for k, v in hasil.cf.items() %}
+            <li>{{ k }} : {{ "%.2f"|format(v) }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Skor Akhir (Hybrid)</h3>
+        <ul>
+            {% for k, v in hasil.final.items() %}
+            <li>{{ k }} : {{ "%.2f"|format(v) }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>
+            ⚠️ Kesimpulan:
+            <span class="badge badge-danger">{{ hasil.diagnosis }}</span>
+        </h2>
+    </div>
+    {% endif %}
+
+    <footer>
+        © 2025 | Sistem Pakar Diagnosa Kerusakan Laptop – TA Kecerdasan Buatan
+    </footer>
+</div>
+
+</body>
+</html>
